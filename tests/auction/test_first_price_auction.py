@@ -34,32 +34,33 @@ class TestFirstPriceAuction(unittest.TestCase):
 
     def test_starting_auction(self):
         """Test if Auction starts successfully"""
-        self.assertTrue(self.auction.start_date is None)
+        self.assertIsNone(self.auction.start_date)
+
 
         auction = self.first_price_auction.start_auction(self.auction)
 
-        self.assertFalse(auction.start_date is None)
-        self.assertFalse(self.auction.start_date is None)
+        self.assertIsNotNone(auction.start_date)
+        self.assertIsNotNone(self.auction.start_date)
+
 
     def test_starting_already_started_auction_fails(self):
         """Test if starting an already started auction fails by raising an Exception"""
-        auction = self.first_price_auction.start_auction(self.auction)
 
         with self.assertRaises(ValueError):
             self.first_price_auction.start_auction(self.auction)
 
     def test_ending_auction(self):
         """Test if Auction ends successfully"""
-        self.assertTrue(self.auction.end_date is None)
+        self.assertIsNone(self.auction.end_date)
 
         auction = self.first_price_auction.end_auction(self.auction)
 
-        self.assertFalse(auction.end_date is None)
-        self.assertFalse(self.auction.end_date is None)
+        self.assertIsNotNone(auction.end_date)
+        self.assertIsNotNone(auction.end_date)
+
 
     def test_ending_already_ended_auction_fails(self):
         """Test if ending an already ended auction fails by raising an Exception"""
-        auction = self.first_price_auction.end_auction(self.auction)
 
         with self.assertRaises(ValueError):
             self.first_price_auction.end_auction(self.auction)
@@ -80,8 +81,8 @@ class TestFirstPriceAuction(unittest.TestCase):
 
         auction = self.first_price_auction.add_participant(self.auction, p)
 
-        self.assertTrue(p in self.auction.participants)
-        self.assertTrue(p in auction.participants)
+        self.assertIn(p, self.auction.participants)
+        self.assertIn(p, auction.participants)
 
     def test_adding_already_added_user_fails(self):
         """Test if adding an already added user fails by raising an Exception"""
@@ -141,11 +142,11 @@ class TestFirstPriceAuction(unittest.TestCase):
             date=CustomDate(DateType.MILADI, datetime.now()),
         )
 
-        self.first_price_auction.add_participant(self.auction, p)
         auction = self.first_price_auction.place_new_bid(self.auction, b)
 
         self.assertEqual(len(self.auction.bids), 1)
-        self.assertTrue(b in self.auction.bids)
+        self.assertIn(b,self.auction.bids)
+
 
     def test_getting_winner_successfully(self):
         """Test if auction returns the winner successfully using FirstPrice method"""
@@ -204,8 +205,7 @@ class TestFirstPriceAuction(unittest.TestCase):
         auction = self.first_price_auction.add_participant(self.auction, p)
         auction = self.first_price_auction.remove_user(auction=auction, user=p)
 
-        # with self.assertRaises(KeyError):
-        #     self.first_price_auction.add_participant(self.auction, p)
+\
 
         self.assertEqual(len(self.auction.participants), 0)
 
